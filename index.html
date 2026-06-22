@@ -12,8 +12,8 @@
 <style>
   :root {
     --bg: #ffffff;
-    --bg2: #f5f5f7;
-    --bg3: #ececec;
+    --bg2: #ffffff;
+    --bg3: #f5f0ec;
     --text: #1a1a1a;
     --text2: #555;
     --text3: #999;
@@ -25,8 +25,8 @@
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1c1c1e;
-      --bg2: #2c2c2e;
-      --bg3: #3a3a3c;
+      --bg2: #1c1c1e;
+      --bg3: #2c2c2e;
       --text: #f2f2f7;
       --text2: #aeaeb2;
       --text3: #636366;
@@ -39,8 +39,11 @@
 
   .app { max-width: 680px; margin: 0 auto; padding: 0 0 80px; }
 
+  /* rainbow bar */
+  .rainbow-bar { height: 6px; background: linear-gradient(90deg,#f4a7b9,#e8a598,#e8c472,#a8c47a,#7ab8b8,#9b8ec4,#d4a0c0); }
+
   /* header */
-  .header { text-align: center; padding: 28px 16px 16px; }
+  .header { text-align: center; padding: 20px 16px 14px; }
   .header h1 { font-size: 24px; font-weight: 700; }
   .header p { font-size: 13px; color: var(--text3); margin-top: 2px; }
 
@@ -48,18 +51,25 @@
   .tabs-wrap { padding: 0 12px 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .tabs-wrap::-webkit-scrollbar { display: none; }
   .tabs { display: flex; gap: 6px; padding-bottom: 4px; width: max-content; }
-  .tab { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all 0.18s; background: var(--bg3); color: var(--text2); white-space: nowrap; user-select: none; }
-  .tab:hover { transform: translateY(-1px); }
+  .tab { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all 0.18s; white-space: nowrap; user-select: none; }
+  .tab:hover { transform: translateY(-1px); filter: brightness(0.95); }
   .tab.active { transform: translateY(-2px); }
-  .tab[data-cat="all"].active    { background:#f8e8ff; color:#7c3aed; border-color:#c4b5fd; box-shadow:0 3px 0 #c4b5fd; }
-  .tab[data-cat="cheers"].active { background:#d1fae5; color:#065f46; border-color:#6ee7b7; box-shadow:0 3px 0 #6ee7b7; }
-  .tab[data-cat="houjitsu"].active{ background:#dbeafe; color:#1e40af; border-color:#93c5fd; box-shadow:0 3px 0 #93c5fd; }
-  .tab[data-cat="bng"].active    { background:#e0f2fe; color:#075985; border-color:#7dd3fc; box-shadow:0 3px 0 #7dd3fc; }
-  .tab[data-cat="other"].active  { background:#fef3c7; color:#92400e; border-color:#fcd34d; box-shadow:0 3px 0 #fcd34d; }
-  .tab[data-cat="private"].active{ background:#fee2e2; color:#991b1b; border-color:#fca5a5; box-shadow:0 3px 0 #fca5a5; }
+  .tab[data-cat="all"]      { background:#f0ebe8; color:#6b4f47; border-color:#ddd0cc; }
+  .tab[data-cat="cheers"]   { background:#f5e6d8; color:#7a4a2a; border-color:#e0c4a8; }
+  .tab[data-cat="houjitsu"] { background:#f5f0d8; color:#6b5a20; border-color:#ddd0a0; }
+  .tab[data-cat="bng"]      { background:#e0ede0; color:#2a5a3a; border-color:#b8d4b8; }
+  .tab[data-cat="other"]    { background:#d8eaea; color:#1e4f4f; border-color:#a8cccc; }
+  .tab[data-cat="private"]  { background:#ebe0f0; color:#4f2a6b; border-color:#ccaae0; }
+  .tab[data-cat="all"].active      { box-shadow:0 3px 0 #c4a89c; border-color:#c4a89c; }
+  .tab[data-cat="cheers"].active   { box-shadow:0 3px 0 #c4986a; border-color:#c4986a; }
+  .tab[data-cat="houjitsu"].active { box-shadow:0 3px 0 #c4b060; border-color:#c4b060; }
+  .tab[data-cat="bng"].active      { box-shadow:0 3px 0 #7aaa8a; border-color:#7aaa8a; }
+  .tab[data-cat="other"].active    { box-shadow:0 3px 0 #70aaaa; border-color:#70aaaa; }
+  .tab[data-cat="private"].active  { box-shadow:0 3px 0 #aa80cc; border-color:#aa80cc; }
 
   /* input card */
-  .input-card { margin: 12px; background: var(--bg); border-radius: 20px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .input-card { margin: 12px; background: linear-gradient(135deg, #f5e6d8 0%, #f5f0d8 35%, #e0ede0 70%, #d8eaea 100%); border-radius: 20px; padding: 14px 16px; box-shadow: var(--shadow); border: 1.5px solid rgba(180,168,148,0.25); }
+  @media (prefers-color-scheme: dark) { .input-card { background: linear-gradient(135deg, #2d1520 0%, #2a2a10 25%, #0f2418 50%, #0f1a2e 75%, #1e1028 100%); border-color: rgba(196,181,253,0.15); } }
   .text-row { display: flex; gap: 8px; margin-bottom: 10px; }
   .text-row input { flex: 1; padding: 10px 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 15px; font-family: inherit; background: var(--bg2); color: var(--text); transition: border-color 0.15s; }
   .text-row input:focus { outline: none; border-color: #c4b5fd; }
@@ -79,9 +89,9 @@
   .imp-btn.sel-low  { background:#d1fae5; color:#065f46; border-color:#6ee7b7; }
   .imp-btn.sel-mid  { background:#fef3c7; color:#92400e; border-color:#fcd34d; }
   .imp-btn.sel-high { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
-  .add-btn { margin-left: auto; padding: 8px 18px; border: none; border-radius: 16px; background: linear-gradient(135deg, #a78bfa, #f472b6); color: white; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 0 #7c3aed; transition: all 0.15s; white-space: nowrap; }
-  .add-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #7c3aed; }
-  .add-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #7c3aed; }
+  .add-btn { margin-left: auto; padding: 8px 18px; border: none; border-radius: 16px; background: linear-gradient(135deg, #c4986a, #e8a598); color: white; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 0 #a07050; transition: all 0.15s; white-space: nowrap; }
+  .add-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #a07050; }
+  .add-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #a07050; }
 
   /* task list */
   .section-wrap { padding: 0 12px; margin-top: 8px; }
@@ -109,19 +119,35 @@
   .chip-deadline-ok   { background: #d1fae5; color: #065f46; }
   .chip-deadline-soon { background: #fef3c7; color: #92400e; }
   .chip-deadline-urg  { background: #fee2e2; color: #991b1b; }
-  .chip-low  { background: #d1fae5; color: #065f46; }
-  .chip-mid  { background: #fef3c7; color: #92400e; }
-  .chip-high { background: #fee2e2; color: #991b1b; }
+  .chip-low  { background: #e0ede0; color: #2a5a3a; }
+  .chip-mid  { background: #f5f0d8; color: #6b5a20; }
+  .chip-high { background: #f5e0d8; color: #7a2a1e; }
   .chip-cat  { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
-  .pill-cheers   { background: #d1fae5; color: #065f46; }
-  .pill-houjitsu { background: #dbeafe; color: #1e40af; }
-  .pill-bng      { background: #e0f2fe; color: #075985; }
-  .pill-other    { background: #fef3c7; color: #92400e; }
-  .pill-private  { background: #fee2e2; color: #991b1b; }
+  .pill-cheers   { background: #f5e6d8; color: #7a4a2a; }
+  .pill-houjitsu { background: #f5f0d8; color: #6b5a20; }
+  .pill-bng      { background: #d8eaea; color: #1e4f4f; }
+  .pill-other    { background: #e0ede0; color: #2a5a3a; }
+  .pill-private  { background: #ebe0f0; color: #4f2a6b; }
 
-  .task-del { opacity: 0; cursor: pointer; color: var(--text3); padding: 3px 6px; border-radius: 8px; transition: all 0.15s; font-size: 14px; margin-top: 1px; }
-  .task-item:hover .task-del, .task-item:focus-within .task-del { opacity: 1; }
+  .task-actions { display: flex; gap: 2px; margin-top: 1px; opacity: 0; transition: opacity 0.15s; }
+  .task-item:hover .task-actions, .task-item:focus-within .task-actions { opacity: 1; }
+  .task-del, .task-edit { cursor: pointer; color: var(--text3); padding: 3px 6px; border-radius: 8px; transition: all 0.15s; font-size: 14px; }
   .task-del:hover { color: #ef4444; background: #fee2e2; }
+  .task-edit:hover { color: #7c3aed; background: #f8e8ff; }
+
+  /* edit modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg); border-radius: 20px; padding: 20px; width: 100%; max-width: 480px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+  .modal input[type="text"] { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 15px; font-family: inherit; background: var(--bg2); color: var(--text); margin-bottom: 12px; }
+  .modal input[type="text"]:focus { outline: none; border-color: #c4b5fd; }
+  .modal input[type="date"] { padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 13px; font-family: inherit; background: var(--bg2); color: var(--text); }
+  .modal-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel { padding: 8px 16px; border: 1.5px solid var(--border2); border-radius: 14px; background: transparent; color: var(--text2); font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+  .btn-save { padding: 8px 20px; border: none; border-radius: 14px; background: linear-gradient(135deg,#a78bfa,#f472b6); color: white; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 0 #7c3aed; }
+  .btn-save:hover { transform: translateY(-1px); }
 
   /* divider */
   .divider { margin: 20px 12px; display: flex; align-items: center; gap: 8px; }
@@ -129,8 +155,8 @@
 
   /* archive */
   .archive-wrap { padding: 0 12px; }
-  .archive-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--text2); padding: 10px 14px; border: 2px dashed var(--border2); border-radius: 14px; transition: all 0.15s; user-select: none; }
-  .archive-toggle:hover { background: var(--bg3); }
+  .archive-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 700; color: #7a4a2a; padding: 10px 14px; border: 2px dashed #c4986a; border-radius: 14px; transition: all 0.15s; user-select: none; background: #f5e6d8; }
+  .archive-toggle:hover { background: #eedacc; }
   .archive-toggle .arr { margin-left: auto; transition: transform 0.2s; }
   .archive-toggle.open .arr { transform: rotate(180deg); }
   .archive-count { font-size: 11px; font-weight: 700; background: var(--bg3); padding: 2px 8px; border-radius: 10px; }
@@ -142,12 +168,20 @@
 
   .empty { font-size: 13px; color: var(--text3); padding: 20px 0; text-align: center; }
 
+  /* drag reorder */
+  .task-item { cursor: default; }
+  .drag-handle { cursor: grab; color: var(--text3); padding: 3px 4px; border-radius: 6px; font-size: 16px; margin-top: 1px; flex-shrink: 0; touch-action: none; }
+  .drag-handle:hover { color: var(--text2); background: var(--bg3); }
+  .task-item.dragging { opacity: 0.4; border-style: dashed; }
+  .task-item.drag-over { border-color: #a78bfa; background: #f8e8ff; transform: scale(1.01); }
+
   @keyframes pop { 0%{opacity:1;transform:scale(0.5)translateY(0)} 100%{opacity:0;transform:scale(2)translateY(-30px)} }
   .confetti-pop { position: fixed; pointer-events: none; animation: pop 0.55s ease-out forwards; font-size: 18px; z-index: 9999; }
   @keyframes bounceIn { 0%{opacity:0;transform:scale(0.85)translateY(8px)} 60%{transform:scale(1.03)translateY(-2px)} 100%{opacity:1;transform:scale(1)translateY(0)} }
 </style>
 </head>
 <body>
+<div class="rainbow-bar"></div>
 <div class="app">
   <div class="header">
     <h1>✅ My Tasks</h1>
@@ -190,6 +224,36 @@
   </div>
 
   <div class="divider"><span>🗂</span></div>
+
+  <!-- edit modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal">
+      <h3>✏️ タスクを編集</h3>
+      <input type="text" id="edit-text" placeholder="タスク内容" />
+      <div class="modal-meta">
+        <span class="meta-label">締切</span>
+        <input type="date" id="edit-deadline" />
+        <span class="meta-label">重要度</span>
+        <div class="imp-btns">
+          <button class="imp-btn" data-eimp="low" onclick="setEditImp('low')">低</button>
+          <button class="imp-btn" data-eimp="mid" onclick="setEditImp('mid')">中</button>
+          <button class="imp-btn" data-eimp="high" onclick="setEditImp('high')">高</button>
+        </div>
+        <span class="meta-label">カテゴリ</span>
+        <select id="edit-cat" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:12px;font-size:12px;font-family:inherit;background:var(--bg2);color:var(--text);">
+          <option value="cheers">📣 CHEERS</option>
+          <option value="houjitsu">📰 房日新聞</option>
+          <option value="bng">🩵 BNG</option>
+          <option value="other">📍 その他</option>
+          <option value="private">🏠 プライベート</option>
+        </select>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+        <button class="btn-save" onclick="saveEdit()">保存</button>
+      </div>
+    </div>
+  </div>
 
   <div class="archive-wrap">
     <div class="archive-toggle" id="archive-toggle" onclick="toggleArchive()">
@@ -383,7 +447,8 @@ function render() {
   list.innerHTML = filtered.length === 0
     ? '<div class="empty">タスクなし！えらい🎊</div>'
     : filtered.map(t => `
-      <div class="task-item ${urgencyClass(t)}" data-id="${t.id}">
+      <div class="task-item ${urgencyClass(t)}" data-id="${t.id}" draggable="true">
+        <span class="drag-handle" title="ドラッグして並び替え">⠿</span>
         <div class="task-check" onclick="completeTask(${t.id})" title="完了！">
           <i class="ti ti-check" style="font-size:13px;color:#a78bfa;"></i>
         </div>
@@ -396,12 +461,18 @@ function render() {
             ${currentCat === 'all' ? `<span class="chip-cat pill-${t.cat}">${ICONS[t.cat] || ''} ${CATS[t.cat] || ''}</span>` : ''}
           </div>
         </div>
-        <span class="task-del" onclick="deleteTask(${t.id})" title="削除">
-          <i class="ti ti-x" style="font-size:14px"></i>
-        </span>
+        <div class="task-actions">
+          <span class="task-edit" onclick="openEdit(${t.id})" title="編集">
+            <i class="ti ti-pencil" style="font-size:14px"></i>
+          </span>
+          <span class="task-del" onclick="deleteTask(${t.id})" title="削除">
+            <i class="ti ti-x" style="font-size:14px"></i>
+          </span>
+        </div>
       </div>`).join('');
   document.getElementById('archive-count').textContent = archive.length;
   if (archiveOpen) renderArchive();
+  initDrag();
 }
 
 function renderArchive() {
@@ -418,6 +489,90 @@ function renderArchive() {
         </span>
       </div>`).join('');
 }
+
+// drag reorder
+let dragSrcId = null;
+
+function initDrag() {
+  document.querySelectorAll('.task-item').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      dragSrcId = parseInt(el.dataset.id);
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      document.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over'));
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      const targetId = parseInt(el.dataset.id);
+      if (dragSrcId === targetId) return;
+      const filtered = currentCat === 'all' ? tasks : tasks.filter(t => t.cat === currentCat);
+      filtered.sort((a, b) => scoreTask(b) - scoreTask(a));
+      const srcIdx = filtered.findIndex(t => t.id === dragSrcId);
+      const tgtIdx = filtered.findIndex(t => t.id === targetId);
+      const [moved] = filtered.splice(srcIdx, 1);
+      filtered.splice(tgtIdx, 0, moved);
+      // rebuild tasks preserving items not in filtered
+      const otherTasks = tasks.filter(t => !filtered.find(f => f.id === t.id));
+      tasks = [...filtered, ...otherTasks];
+      save('mytasks_v1', tasks);
+      render();
+    });
+  });
+}
+
+let editingId = null;
+let editImp = 'high';
+
+function openEdit(id) {
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  editingId = id;
+  document.getElementById('edit-text').value = t.text;
+  document.getElementById('edit-deadline').value = t.deadline || '';
+  document.getElementById('edit-cat').value = t.cat;
+  setEditImp(t.importance || 'high');
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('edit-text').focus(), 50);
+}
+
+function setEditImp(val) {
+  editImp = val;
+  document.querySelectorAll('[data-eimp]').forEach(b => {
+    b.className = 'imp-btn' + (b.dataset.eimp === val ? ' sel-' + val : '');
+  });
+}
+
+function saveEdit() {
+  const text = document.getElementById('edit-text').value.trim();
+  if (!text) return;
+  tasks = tasks.map(t => t.id === editingId ? {
+    ...t,
+    text,
+    deadline: document.getElementById('edit-deadline').value || null,
+    importance: editImp,
+    cat: document.getElementById('edit-cat').value,
+  } : t);
+  save('mytasks_v1', tasks);
+  closeModal();
+  render();
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingId = null;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 render();
 </script>
