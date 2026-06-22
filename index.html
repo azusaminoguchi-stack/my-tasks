@@ -307,7 +307,7 @@ document.getElementById('tabs').addEventListener('click', e => {
 });
 
 document.getElementById('task-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addTask();
+  if (e.key === 'Enter') e.preventDefault();
 });
 
 function setImp(val) {
