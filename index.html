@@ -214,7 +214,7 @@
         <button class="imp-btn" data-imp="mid" onclick="setImp('mid')">中</button>
         <button class="imp-btn sel-high" data-imp="high" onclick="setImp('high')">高</button>
       </div>
-      <button class="add-btn" onclick="addTask()">＋ 追加</button>
+      <button class="add-btn" id="add-btn" onclick="addTask()">＋ 追加</button>
     </div>
   </div>
 
@@ -306,8 +306,23 @@ document.getElementById('tabs').addEventListener('click', e => {
   render();
 });
 
+let enterOnce = false;
+let enterTimer = null;
 document.getElementById('task-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') e.preventDefault();
+  if (e.key !== 'Enter') { enterOnce = false; return; }
+  e.preventDefault();
+  if (!enterOnce) {
+    enterOnce = true;
+    const btn = document.getElementById('add-btn');
+    btn.style.transform = 'scale(1.08)';
+    btn.style.boxShadow = '0 0 0 4px rgba(192,152,106,0.4)';
+    setTimeout(() => { btn.style.transform = ''; btn.style.boxShadow = ''; }, 400);
+    enterTimer = setTimeout(() => { enterOnce = false; }, 2000);
+  } else {
+    clearTimeout(enterTimer);
+    enterOnce = false;
+    addTask();
+  }
 });
 
 function setImp(val) {
