@@ -48,7 +48,8 @@
   .header p { font-size: 13px; color: var(--text3); margin-top: 2px; }
 
   /* tabs */
-  .tabs-wrap { padding: 0 12px 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tabs-outer { padding: 0 12px 4px; display: flex; align-items: center; gap: 8px; }
+  .tabs-wrap { flex: 1; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .tabs-wrap::-webkit-scrollbar { display: none; }
   .tabs { display: flex; gap: 6px; padding-bottom: 4px; width: max-content; }
   .tab { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all 0.18s; white-space: nowrap; user-select: none; }
@@ -135,6 +136,32 @@
   .task-del:hover { color: #ef4444; background: #fee2e2; }
   .task-edit:hover { color: #7c3aed; background: #f8e8ff; }
 
+  /* cat add btn in tabs */
+  .tab-add-btn { width: 34px; height: 34px; border-radius: 50%; border: 2px dashed var(--border2); background: transparent; color: var(--text3); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .tab-add-btn:hover { border-color: #c4986a; color: #c4986a; background: #f5e6d8; transform: scale(1.1); }
+
+  /* cat panel (inline below tabs) */
+  .cat-panel { margin: 0 12px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 18px; padding: 14px; display: none; }
+  .cat-panel.open { display: block; }
+  .cat-panel-title { font-size: 13px; font-weight: 700; color: var(--text2); margin-bottom: 10px; }
+  .cat-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .cat-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--bg2); border-radius: 12px; border: 1.5px solid var(--border); }
+  .cat-row-drag { cursor: grab; color: var(--text3); font-size: 16px; }
+  .cat-row-emoji { width: 28px; text-align: center; font-size: 17px; }
+  .cat-row-name { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); }
+  .cat-row-arrows { display: flex; flex-direction: column; gap: 1px; }
+  .cat-arrow { cursor: pointer; color: var(--text3); font-size: 11px; line-height: 1; padding: 1px 4px; border-radius: 4px; border: none; background: transparent; }
+  .cat-arrow:hover { background: var(--bg3); color: var(--text); }
+  .cat-row-del { cursor: pointer; color: var(--text3); padding: 3px 6px; border-radius: 8px; font-size: 14px; }
+  .cat-row-del:hover { color: #ef4444; background: #fee2e2; }
+  .cat-row.drag-over { border-color: #c4986a; background: #f5e6d8; }
+  .cat-add-row { display: flex; gap: 6px; align-items: center; }
+  .cat-add-row input { padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; font-family: inherit; background: var(--bg2); color: var(--text); }
+  .cat-add-row input:focus { outline: none; border-color: #c4986a; }
+  .cat-add-row input.emoji-in { width: 50px; text-align: center; font-size: 16px; }
+  .cat-add-row input.name-in { flex: 1; }
+  .btn-cat-add { padding: 7px 14px; border: none; border-radius: 12px; background: linear-gradient(135deg,#c4986a,#e8a598); color: white; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap; }
+
   /* edit modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
   .modal-overlay.open { display: flex; }
@@ -188,14 +215,20 @@
     <p>今日もがんばろう！</p>
   </div>
 
-  <div class="tabs-wrap">
-    <div class="tabs" id="tabs">
-      <div class="tab active" data-cat="all">🌈 すべて</div>
-      <div class="tab" data-cat="cheers">📣 CHEERS</div>
-      <div class="tab" data-cat="houjitsu">📰 房日新聞</div>
-      <div class="tab" data-cat="bng">🩵 BNG</div>
-      <div class="tab" data-cat="other">📍 その他</div>
-      <div class="tab" data-cat="private">🏠 プライベート</div>
+  <div class="tabs-outer">
+    <div class="tabs-wrap">
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <button class="tab-add-btn" onclick="toggleCatPanel()" title="カテゴリを編集">＋</button>
+  </div>
+
+  <div class="cat-panel" id="cat-panel">
+    <div class="cat-panel-title">カテゴリを編集</div>
+    <div class="cat-list" id="cat-list"></div>
+    <div class="cat-add-row">
+      <input class="emoji-in" type="text" id="new-cat-emoji" placeholder="🏷️" maxlength="2" />
+      <input class="name-in" type="text" id="new-cat-name" placeholder="カテゴリ名を入力" />
+      <button class="btn-cat-add" onclick="addCat()">追加</button>
     </div>
   </div>
 
@@ -240,13 +273,7 @@
           <button class="imp-btn" data-eimp="high" onclick="setEditImp('high')">高</button>
         </div>
         <span class="meta-label">カテゴリ</span>
-        <select id="edit-cat" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:12px;font-size:12px;font-family:inherit;background:var(--bg2);color:var(--text);">
-          <option value="cheers">📣 CHEERS</option>
-          <option value="houjitsu">📰 房日新聞</option>
-          <option value="bng">🩵 BNG</option>
-          <option value="other">📍 その他</option>
-          <option value="private">🏠 プライベート</option>
-        </select>
+        <select id="edit-cat" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:12px;font-size:12px;font-family:inherit;background:var(--bg2);color:var(--text);"></select>
       </div>
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
@@ -267,13 +294,21 @@
 </div>
 
 <script>
-const CATS = { cheers:'CHEERS', houjitsu:'房日新聞', bng:'BNG', other:'その他', private:'プライベート' };
-const ICONS = { cheers:'📣', houjitsu:'📰', bng:'🩵', other:'📍', private:'🏠' };
-let currentCat = 'all', archiveOpen = false, currentImp = 'high';
-let recognition = null, isRecording = false;
-
 const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch { return d; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+const DEFAULT_CATS = [
+  { id:'cheers',   name:'CHEERS',  icon:'📣' },
+  { id:'houjitsu', name:'房日新聞', icon:'📰' },
+  { id:'bng',      name:'BNG',     icon:'🩵' },
+  { id:'other',    name:'その他',   icon:'📍' },
+  { id:'private',  name:'プライベート', icon:'🏠' },
+];
+let userCats = load('mytasks_cats', DEFAULT_CATS);
+const CATS = new Proxy({}, { get: (_, k) => (userCats.find(c=>c.id===k)||{}).name||'' });
+const ICONS = new Proxy({}, { get: (_, k) => (userCats.find(c=>c.id===k)||{}).icon||'' });
+let currentCat = 'all', archiveOpen = false, currentImp = 'high';
+let recognition = null, isRecording = false;
 
 let tasks = load('mytasks_v1', []);
 let archive = load('mytasks_archive_v1', []);
@@ -298,13 +333,6 @@ function scoreTask(t) {
   return urgency * 3 + imp * 10;
 }
 
-document.getElementById('tabs').addEventListener('click', e => {
-  const tab = e.target.closest('.tab');
-  if (!tab) return;
-  currentCat = tab.dataset.cat;
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
-  render();
-});
 
 let enterOnce = false;
 let enterTimer = null;
@@ -336,7 +364,7 @@ function addTask() {
   const inp = document.getElementById('task-input');
   const text = inp.value.trim();
   if (!text) return;
-  const cat = currentCat === 'all' ? 'other' : currentCat;
+  const cat = currentCat === 'all' ? (userCats[0]?.id || 'other') : currentCat;
   const deadline = document.getElementById('deadline-input').value || null;
   tasks.push({ id: Date.now(), text, cat, importance: currentImp, deadline, createdAt: today() });
   save('mytasks_v1', tasks);
@@ -347,32 +375,45 @@ function addTask() {
 function toggleVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    document.getElementById('voice-hint').textContent = 'このブラウザは音声入力に対応していません';
+    document.getElementById('voice-hint').textContent = '⚠️ Chromeで開くと音声入力が使えます';
     return;
   }
   if (isRecording) { stopVoice(); return; }
-  recognition = new SR();
-  recognition.lang = 'ja-JP';
-  recognition.continuous = false;
-  recognition.interimResults = true;
-  recognition.onstart = () => {
-    isRecording = true;
-    document.getElementById('mic-btn').classList.add('recording');
-    document.getElementById('mic-btn').textContent = '🔴';
-    document.getElementById('voice-hint').textContent = '🎤 聞いてるよ…話してね！';
-  };
-  recognition.onresult = e => {
-    let interim = '', final = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) final += e.results[i][0].transcript;
-      else interim += e.results[i][0].transcript;
-    }
-    document.getElementById('task-input').value = final || interim;
-    if (final) document.getElementById('voice-hint').textContent = '✅ 認識完了！確認して追加してね';
-  };
-  recognition.onerror = () => { stopVoice(); document.getElementById('voice-hint').textContent = 'もう一度試してね'; };
-  recognition.onend = () => stopVoice();
-  recognition.start();
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
+    recognition = new SR();
+    recognition.lang = 'ja-JP';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.onstart = () => {
+      isRecording = true;
+      document.getElementById('mic-btn').classList.add('recording');
+      document.getElementById('mic-btn').textContent = '🔴';
+      document.getElementById('voice-hint').textContent = '🎤 聞いてるよ…話してね！';
+    };
+    recognition.onresult = e => {
+      let interim = '', final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      document.getElementById('task-input').value = final || interim;
+      if (final) document.getElementById('voice-hint').textContent = '✅ 認識完了！確認して追加してね';
+    };
+    recognition.onerror = e => {
+      stopVoice();
+      const msgs = {
+        'not-allowed': '🚫 マイクの許可が必要です。ブラウザの設定から許可してください',
+        'no-speech':   '🤔 声が聞こえなかった。もう一度試してね',
+        'network':     '📡 ネットワークエラー。接続を確認してね',
+      };
+      document.getElementById('voice-hint').textContent = msgs[e.error] || 'もう一度試してね';
+    };
+    recognition.onend = () => stopVoice();
+    recognition.start();
+  }).catch(() => {
+    document.getElementById('voice-hint').textContent = '🚫 マイクの許可が必要です。ブラウザのアドレスバー横の🔒から許可してください';
+  });
 }
 
 function stopVoice() {
@@ -433,6 +474,18 @@ function toggleArchive() {
 
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
+const CAT_COLORS = [
+  {bg:'#f5e6d8',color:'#7a4a2a'},{bg:'#f5f0d8',color:'#6b5a20'},
+  {bg:'#e0ede0',color:'#2a5a3a'},{bg:'#d8eaea',color:'#1e4f4f'},
+  {bg:'#ebe0f0',color:'#4f2a6b'},{bg:'#f5e8f0',color:'#6b2a4f'},
+  {bg:'#e8f0e0',color:'#3a5a1e'},{bg:'#f0ebe8',color:'#6b4f47'},
+];
+function catStyle(catId) {
+  const idx = userCats.findIndex(c => c.id === catId);
+  const c = CAT_COLORS[idx % CAT_COLORS.length] || CAT_COLORS[0];
+  return `background:${c.bg};color:${c.color};`;
+}
+
 function deadlineChip(dl) {
   if (!dl) return '';
   const d = daysLeft(dl);
@@ -473,7 +526,7 @@ function render() {
             ${impChip(t.importance)}
             ${deadlineChip(t.deadline)}
             <span class="meta-chip chip-date">📝 ${t.createdAt || ''}</span>
-            ${currentCat === 'all' ? `<span class="chip-cat pill-${t.cat}">${ICONS[t.cat] || ''} ${CATS[t.cat] || ''}</span>` : ''}
+            ${currentCat === 'all' ? `<span class="chip-cat" style="${catStyle(t.cat)}">${ICONS[t.cat] || ''} ${CATS[t.cat] || ''}</span>` : ''}
           </div>
         </div>
         <div class="task-actions">
@@ -498,7 +551,7 @@ function renderArchive() {
       <div class="archive-item">
         <span style="font-size:16px;">✅</span>
         <span class="archive-text">${esc(a.text)}</span>
-        <span class="chip-cat pill-${a.cat}" style="font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;">${ICONS[a.cat] || ''} ${CATS[a.cat] || ''}</span>
+        <span class="chip-cat" style="font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;${catStyle(a.cat)}">${ICONS[a.cat] || ''} ${CATS[a.cat] || ''}</span>
         <span class="arch-del" onclick="deleteArchive(${a.id})" title="完全削除">
           <i class="ti ti-trash" style="font-size:14px"></i>
         </span>
@@ -544,6 +597,101 @@ function initDrag() {
   });
 }
 
+// category panel
+let catPanelOpen = false;
+function toggleCatPanel() {
+  catPanelOpen = !catPanelOpen;
+  const panel = document.getElementById('cat-panel');
+  panel.classList.toggle('open', catPanelOpen);
+  if (catPanelOpen) renderCatList();
+}
+function renderCatList() {
+  const list = document.getElementById('cat-list');
+  list.innerHTML = userCats.map((c, i) => `
+    <div class="cat-row" data-id="${c.id}" draggable="true">
+      <span class="cat-row-drag">⠿</span>
+      <span class="cat-row-emoji">${c.icon}</span>
+      <span class="cat-row-name">${esc(c.name)}</span>
+      <div class="cat-row-arrows">
+        <button class="cat-arrow" onclick="moveCat(${i},-1)" ${i===0?'disabled':''}>▲</button>
+        <button class="cat-arrow" onclick="moveCat(${i},1)" ${i===userCats.length-1?'disabled':''}>▼</button>
+      </div>
+      <span class="cat-row-del" onclick="deleteCat('${c.id}')"><i class="ti ti-x"></i></span>
+    </div>`).join('');
+  initCatDrag();
+}
+function moveCat(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= userCats.length) return;
+  [userCats[i], userCats[j]] = [userCats[j], userCats[i]];
+  save('mytasks_cats', userCats);
+  renderCatList();
+  renderTabs();
+}
+function addCat() {
+  const emoji = document.getElementById('new-cat-emoji').value.trim() || '🏷️';
+  const name  = document.getElementById('new-cat-name').value.trim();
+  if (!name) return;
+  userCats.push({ id: 'cat_' + Date.now(), name, icon: emoji });
+  save('mytasks_cats', userCats);
+  document.getElementById('new-cat-emoji').value = '';
+  document.getElementById('new-cat-name').value = '';
+  renderCatList();
+  renderTabs();
+}
+function deleteCat(id) {
+  if (userCats.length <= 1) return;
+  userCats = userCats.filter(c => c.id !== id);
+  save('mytasks_cats', userCats);
+  if (currentCat === id) currentCat = 'all';
+  renderCatList();
+  renderTabs();
+}
+let catDragSrc = null;
+function initCatDrag() {
+  document.querySelectorAll('.cat-row').forEach(el => {
+    el.addEventListener('dragstart', () => { catDragSrc = el.dataset.id; el.style.opacity='0.4'; });
+    el.addEventListener('dragend',   () => { el.style.opacity=''; document.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over')); });
+    el.addEventListener('dragover',  e => { e.preventDefault(); document.querySelectorAll('.cat-row').forEach(r=>r.classList.remove('drag-over')); el.classList.add('drag-over'); });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      const srcIdx = userCats.findIndex(c=>c.id===catDragSrc);
+      const tgtIdx = userCats.findIndex(c=>c.id===el.dataset.id);
+      if (srcIdx<0||tgtIdx<0||srcIdx===tgtIdx) return;
+      const [moved] = userCats.splice(srcIdx,1);
+      userCats.splice(tgtIdx,0,moved);
+      save('mytasks_cats',userCats);
+      renderCatList();
+      renderTabs();
+    });
+  });
+}
+function renderTabs() {
+  const tabColors = ['#f0ebe8','#f5e6d8','#f5f0d8','#e0ede0','#d8eaea','#ebe0f0','#f5e8f0','#e8f0e0'];
+  const shadowColors = ['#c4a89c','#c4986a','#c4b060','#7aaa8a','#70aaaa','#aa80cc','#cc80aa','#90aa70'];
+  const textColors = ['#6b4f47','#7a4a2a','#6b5a20','#2a5a3a','#1e4f4f','#4f2a6b','#6b2a4f','#3a5a1e'];
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = `<div class="tab active" data-cat="all" style="background:#f0ebe8;color:#6b4f47;border-color:#ddd0cc;">🌈 すべて</div>`
+    + userCats.map((c, i) => {
+      const bg = tabColors[i % tabColors.length];
+      const sh = shadowColors[i % shadowColors.length];
+      const tx = textColors[i % textColors.length];
+      return `<div class="tab" data-cat="${c.id}" style="background:${bg};color:${tx};border-color:${sh};" data-shadow="${sh}">${c.icon} ${esc(c.name)}</div>`;
+    }).join('');
+  tabs.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      currentCat = tab.dataset.cat;
+      tabs.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.style.boxShadow = '';
+      });
+      tab.classList.add('active');
+      if (tab.dataset.shadow) tab.style.boxShadow = `0 3px 0 ${tab.dataset.shadow}`;
+      render();
+    });
+  });
+}
+
 let editingId = null;
 let editImp = 'high';
 
@@ -553,7 +701,9 @@ function openEdit(id) {
   editingId = id;
   document.getElementById('edit-text').value = t.text;
   document.getElementById('edit-deadline').value = t.deadline || '';
-  document.getElementById('edit-cat').value = t.cat;
+  const sel = document.getElementById('edit-cat');
+  sel.innerHTML = userCats.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+  sel.value = t.cat;
   setEditImp(t.importance || 'high');
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('edit-text').focus(), 50);
@@ -589,6 +739,7 @@ function closeModal(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+renderTabs();
 render();
 </script>
 </body>
